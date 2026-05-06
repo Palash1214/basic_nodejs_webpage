@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        nodejs 'nodejs'   // Configure in Global Tool Configuration
-    }
-
     environment {
         DOCKER_IMAGE = "palashdevops/nodejs:latest"
         CONTAINER_NAME = "latestnode"
@@ -14,7 +10,6 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                // Uses Jenkins default checkout (no duplicate)
                 checkout scm
             }
         }
@@ -43,22 +38,11 @@ pipeline {
 
         stage('Deploy Container') {
             steps {
-                script {
-                    sh """
-                    docker rm -f $CONTAINER_NAME || true
-                    docker run -d -p 8081:8081 --name $CONTAINER_NAME $DOCKER_IMAGE
-                    """
-                }
+                sh '''
+                docker rm -f latestnode || true
+                docker run -d -p 8081:8081 --name latestnode palashdevops/nodejs:latest
+                '''
             }
-        }
-    }
-
-    post {
-        success {
-            echo 'Pipeline executed successfully ✅'
-        }
-        failure {
-            echo 'Pipeline failed ❌'
         }
     }
 }
