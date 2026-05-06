@@ -1,10 +1,6 @@
 pipeline {
     agent any
     
-    tools{
-     
-    }
-
     stages {
         stage('GIT CHECKOUT') {
             steps {
